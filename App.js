@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 function DisplayBook(props){
   return(
-    <View >
+    <View>
     <Image
       style={styles.tinyLogo}
       source={{
@@ -15,6 +15,7 @@ function DisplayBook(props){
       }}
     />
     <Text style={styles.titleBook}>{props.title}</Text>
+    <Text style={styles.titleBook}>{props.detail}</Text>
 
     </View>
 
@@ -50,12 +51,13 @@ export default class App extends Component {
   render(){
     const {books,names} = this.state
     const de = this.state.books.map((a,b)=>{
-      console.log(a['url'])
+      // console.log(a['url'])
+      console.log("Run")
      return (
-       <DisplayBook style={styles.bookView} title={names[b]} link = {a["url"]}/>
+       <DisplayBook style={styles.bookView} title={names[b]} link = {a["url"]} detail = {a["description"]}/>
       )
     })
-      console.log(books)
+      // console.log(books)
     return (
       <View style={styles.container}>
 
