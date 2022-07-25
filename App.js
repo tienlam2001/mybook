@@ -1,13 +1,69 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Image,Text, View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+import React, { Component } from 'react';
+
+
+function DisplayBook(props){
+  return(
+    <View >
+    <Image
+      style={styles.tinyLogo}
+      source={{
+
+        uri: props.link,
+      }}
+    />
+    <Text style={styles.titleBook}>{props.title}</Text>
+
     </View>
-  );
+
+  )
+}
+
+export default class App extends Component {
+  constructor(props){
+    super(props);
+    this.state ={
+      books: [],
+      names: []
+    }
+  }
+  componentDidMount(){
+    fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
+    .then(req=>req.json())
+    .then(res=>{
+
+
+      keys = Object.keys(res)
+      keys.map(a=>{
+
+        this.setState({
+          names: keys,
+          books: [...this.state.books,res[a]]
+        })
+      })
+
+
+    })
+  }
+  render(){
+    const {books,names} = this.state
+    const de = this.state.books.map((a,b)=>{
+      console.log(a['url'])
+     return (
+       <DisplayBook style={styles.bookView} title={names[b]} link = {a["url"]}/>
+      )
+    })
+      console.log(books)
+    return (
+      <View style={styles.container}>
+
+      {de}
+
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -17,4 +73,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  bookView: {
+        display:'flex',
+        flexDirection: 'row'
+
+  },
+  bookShow: {
+    borderWidth: 1,
+  },
+  tinyLogo: {
+    width : 80,
+    height: 100,
+    margin: 20
+  },
+  titleBook: {
+    fontSize: 20
+  }
 });
