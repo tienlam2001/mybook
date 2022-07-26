@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 function DisplayBook(props){
   return(
-    <View>
+    <View key = {props.title}>
     <Image
       style={styles.tinyLogo}
       source={{
@@ -15,7 +15,7 @@ function DisplayBook(props){
       }}
     />
     <Text style={styles.titleBook}>{props.title}</Text>
-    <Text style={styles.titleBook}>{props.detail}</Text>
+    <Text style={styles.description}>{props.detail}</Text>
 
     </View>
 
@@ -29,6 +29,10 @@ export default class App extends Component {
       books: [],
       names: []
     }
+  }
+  addDetails(){
+  
+
   }
   componentDidMount(){
     fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
@@ -70,14 +74,16 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 100,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   bookView: {
         display:'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+	alignitems: 'center',
+	justifyContent:'center'
 
   },
   bookShow: {
@@ -90,5 +96,8 @@ const styles = StyleSheet.create({
   },
   titleBook: {
     fontSize: 20
-  }
+  },
+  description:{
+    fontSize: 10
+  }	
 });
