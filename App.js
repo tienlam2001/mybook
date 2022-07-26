@@ -1,25 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Image,Text, View } from 'react-native';
+import { StyleSheet, Image,Text, View, Dimensions, ScrollView } from 'react-native';
 
 import React, { Component } from 'react';
 
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 function DisplayBook(props){
   return(
-    <View>
-    <Image
-      style={styles.tinyLogo}
-      source={{
+    <View style={styles.bookView}>
 
-        uri: props.link,
-      }}
-    />
-    <Text style={styles.titleBook}>{props.title}</Text>
-    <Text style={styles.titleBook}>{props.detail}</Text>
+      <Image
+        style={styles.tinyLogo}
+        source={{
+
+          uri: props.link,
+        }}
+      />
+      <View>
+      <Text style={styles.titleBook}>{props.title}</Text>
+      <Text style={styles.titleBook}>{props.detail}</Text>
+      </View>
 
     </View>
 
   )
+}
+
+function InputData(props){
+  return(
+    <View>
+
+    </View>
+  )
+
+}
+
+function addBooks(props){
+    return(
+      <View>
+        <TextInput
+        style={styles.input}
+        placeholder="Book Name"
+        value={text}
+      />
+      <TextInput
+          style={styles.input}
+          placeholder="url"
+          value={text}
+        />
+        <TextInput
+        style={styles.input}
+        // onChangeText={onChangeText}
+        placeholder="description"
+        value={text}
+      />
+      </View>
+    )
 }
 
 export default class App extends Component {
@@ -27,8 +65,12 @@ export default class App extends Component {
     super(props);
     this.state ={
       books: [],
-      names: []
+      names: [],
+      addBooks: False,
     }
+  }
+  addBook(){
+
   }
   componentDidMount(){
     fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
@@ -52,16 +94,18 @@ export default class App extends Component {
     const {books,names} = this.state
     const de = this.state.books.map((a,b)=>{
       // console.log(a['url'])
-      console.log("Run")
      return (
        <DisplayBook style={styles.bookView} title={names[b]} link = {a["url"]} detail = {a["description"]}/>
       )
     })
       // console.log(books)
+      console.log("Run")
     return (
       <View style={styles.container}>
 
+      <ScrollView>
       {de}
+      </ScrollView>
 
       </View>
     );
@@ -77,7 +121,12 @@ const styles = StyleSheet.create({
   },
   bookView: {
         display:'flex',
-        flexDirection: 'row'
+        flexDirection: 'column',
+        borderWidth:2,
+        borderColor:"#7fffd4",
+        width:windowWidth - 2,
+        justifyContent:'center',
+        alignItems:'center'
 
   },
   bookShow: {
@@ -86,9 +135,17 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width : 80,
     height: 100,
-    margin: 20
+    margin: 20,
+    textAlign:'center'
   },
   titleBook: {
-    fontSize: 20
-  }
+    fontSize: 20,
+    textAlign:'center',
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
