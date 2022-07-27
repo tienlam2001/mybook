@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Image,Text, View, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Image,Text, View, Dimensions, ScrollView, Button, Alert } from 'react-native';
 
 import React, { Component } from 'react';
 
@@ -37,7 +37,7 @@ function InputData(props){
 
 }
 
-function addBooks(props){
+function AddBooks(props){
     return(
       <View>
         <TextInput
@@ -70,7 +70,9 @@ export default class App extends Component {
     }
   }
   addBook(){
-
+    this.setState(state=>{
+      renderAddBook: !state.renderAddBook
+    })
   }
   componentDidMount(){
     fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
@@ -83,7 +85,8 @@ export default class App extends Component {
 
         this.setState({
           names: keys,
-          books: [...this.state.books,res[a]]
+          books: [...this.state.books,res[a]],
+          renderAddBook: false
         })
       })
 
@@ -91,20 +94,30 @@ export default class App extends Component {
     })
   }
   render(){
-    const {books,names} = this.state
+    const {books,names,renderAddBook} = this.state
     const de = this.state.books.map((a,b)=>{
       // console.log(a['url'])
      return (
        <DisplayBook style={styles.bookView} title={names[b]} link = {a["url"]} detail = {a["description"]}/>
       )
     })
+    if(this.state.renderAddBook){
+      var addBookTemplate = <AddBooks/>
+    }else{
+      var addBookTemplate = de
+    }
       // console.log(books)
       console.log("Run")
     return (
       <View style={styles.container}>
 
       <ScrollView>
-      {de}
+      {addBookTemplate}
+      <Button
+        title="Press me"
+        onPress={this.addBook()}
+      />
+
       </ScrollView>
 
       </View>
