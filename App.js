@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 
 function DisplayBook(props){
   return(
-    <View style={styles.bookView}>
+    <View style={styles.bookView} key ={props.title}>
 
       <Image
         style={styles.tinyLogo}
@@ -66,7 +66,7 @@ export default class App extends Component {
     this.state ={
       books: [],
       names: [],
-      addBooks: False,
+      addBooks: false
     }
   }
   addBook(){
@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
         borderColor:"#7fffd4",
         width:windowWidth - 2,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        margin: 2
 
   },
   bookShow: {
