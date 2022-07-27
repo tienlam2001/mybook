@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Image,Text, View, Dimensions, ScrollView, Button, Alert } from 'react-native';
+import { StyleSheet,TextInput, Image,Text, View, Dimensions, ScrollView, Button, Alert } from 'react-native';
 
 import React, { Component } from 'react';
 
@@ -39,22 +39,20 @@ function InputData(props){
 
 function AddBooks(props){
     return(
-      <View>
+      <View style={styles.addBookSty}>
+        <Text style = {styles.titleBook}> Add Books</Text>
         <TextInput
         style={styles.input}
         placeholder="Book Name"
-        value={text}
       />
       <TextInput
           style={styles.input}
           placeholder="url"
-          value={text}
         />
         <TextInput
         style={styles.input}
         // onChangeText={onChangeText}
         placeholder="description"
-        value={text}
       />
       </View>
     )
@@ -66,13 +64,9 @@ export default class App extends Component {
     this.state ={
       books: [],
       names: [],
-      addBooks: false
+      addBooks: false,
+      renderAddBook: true,
     }
-  }
-  addBook(){
-    this.setState(state=>{
-      renderAddBook: !state.renderAddBook
-    })
   }
   componentDidMount(){
     fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
@@ -85,8 +79,7 @@ export default class App extends Component {
 
         this.setState({
           names: keys,
-          books: [...this.state.books,res[a]],
-          renderAddBook: false
+          books: [...this.state.books,res[a]]
         })
       })
 
@@ -115,7 +108,12 @@ export default class App extends Component {
       {addBookTemplate}
       <Button
         title="Press me"
-        onPress={this.addBook()}
+        color="#841584"
+        onPress={()=>{
+          this.setState({
+            renderAddBook: true
+          })
+        }}
       />
 
       </ScrollView>
@@ -124,6 +122,28 @@ export default class App extends Component {
     );
   }
 }
+
+
+
+
+//  add information through these form
+// const formData = new FormData();
+//
+// formData.append('book', 'Intelligent Investor');
+// formData.append('url', 'https://target.scene7.com/is/image/Target/GUEST_4f0a0050-6cfc-4d02-9d14-7b9c26d8519b?wid=488&hei=488&fmt=pjpeg');
+// formData.append('idea', 'Book give you the insight about investing');
+//
+// fetch('https://nauticalautomaticirc.lamvan.repl.co/add', {
+//   method: 'POST',
+//   body: formData,
+// })
+// .then((response) => response.json())
+// .then((data) => {
+//   console.log('Success:', data);
+// })
+// .catch((error) => {
+//   console.error('Error:', error);
+// });
 
 const styles = StyleSheet.create({
   container: {
@@ -158,8 +178,16 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
+    width: 300,
     margin: 12,
     borderWidth: 1,
     padding: 10,
   },
+  addBookSty:{
+      flex: 1,
+      height: windowHeight,
+      justifyContent:'center',
+      alignItems: 'center'
+
+  }
 });
