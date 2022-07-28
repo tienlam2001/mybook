@@ -43,15 +43,18 @@ function AddBooks(props){
         <Text style = {styles.titleBook}> Add Books</Text>
         <TextInput
         style={styles.input}
+        value = {props.bookName}
         placeholder="Book Name"
       />
       <TextInput
           style={styles.input}
           placeholder="url"
+          value = {props.link}
         />
         <TextInput
         style={styles.input}
         // onChangeText={onChangeText}
+        value ={props.descrip}
         placeholder="description"
       />
       </View>
@@ -61,12 +64,20 @@ function AddBooks(props){
 export default class App extends Component {
   constructor(props){
     super(props);
+
     this.state ={
       books: [],
       names: [],
       addBooks: false,
-      renderAddBook: true,
+      renderAddBook: false,
     }
+  }
+  addBook(){
+
+    this.setState({
+      renderAddBook: !this.state.renderAddBook
+    })
+
   }
   componentDidMount(){
     fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
@@ -97,7 +108,11 @@ export default class App extends Component {
     if(this.state.renderAddBook){
       var addBookTemplate = <AddBooks/>
     }else{
-      var addBookTemplate = de
+      var addBookTemplate =de
+
+
+
+
     }
       // console.log(books)
       console.log("Run")
@@ -106,15 +121,11 @@ export default class App extends Component {
 
       <ScrollView>
       {addBookTemplate}
-      <Button
-        title="Press me"
-        color="#841584"
-        onPress={()=>{
-          this.setState({
-            renderAddBook: true
-          })
-        }}
-      />
+      <View style={styles.buttonView}>
+      <Button style={styles.buttonSty} title="Add My Book"  onPress={this.addBook.bind(this)}/>
+      <Button style={styles.buttonSty} title="Add Book" color="#f194ff" onPress={()=>{ this.setState({renderAddBook: true})}}/>
+      </View>
+
 
       </ScrollView>
 
@@ -124,26 +135,28 @@ export default class App extends Component {
 }
 
 
+function addMyBook(nameBook, link, description){
+  //  add information through these form
+  const formData = new FormData();
+
+  formData.append('book', nameBook);
+  formData.append('url', link);
+  formData.append('idea', description);
+
+  fetch('https://nauticalautomaticirc.lamvan.repl.co/add', {
+    method: 'POST',
+    body: formData,
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log('Success:', data);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
 
 
-//  add information through these form
-// const formData = new FormData();
-//
-// formData.append('book', 'Intelligent Investor');
-// formData.append('url', 'https://target.scene7.com/is/image/Target/GUEST_4f0a0050-6cfc-4d02-9d14-7b9c26d8519b?wid=488&hei=488&fmt=pjpeg');
-// formData.append('idea', 'Book give you the insight about investing');
-//
-// fetch('https://nauticalautomaticirc.lamvan.repl.co/add', {
-//   method: 'POST',
-//   body: formData,
-// })
-// .then((response) => response.json())
-// .then((data) => {
-//   console.log('Success:', data);
-// })
-// .catch((error) => {
-//   console.error('Error:', error);
-// });
 
 const styles = StyleSheet.create({
   container: {
@@ -157,7 +170,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderWidth:2,
         borderColor:"#7fffd4",
-        width:windowWidth - 2,
+        width:windowWidth - 2 ,
         justifyContent:'center',
         alignItems:'center',
         margin: 2
@@ -170,7 +183,15 @@ const styles = StyleSheet.create({
     width : 80,
     height: 100,
     margin: 20,
-    textAlign:'center'
+
+  },
+  buttonSty:{
+    width: windowWidth / 2,
+    height: 90,
+    borderColor: '#737373',
+    backgroundColor: "red",
+    borderWidth: 2,
+
   },
   titleBook: {
     fontSize: 20,
@@ -188,6 +209,15 @@ const styles = StyleSheet.create({
       height: windowHeight,
       justifyContent:'center',
       alignItems: 'center'
+
+  },
+  buttonView:{
+    display:'flex',
+    width:windowWidth,
+    height: 100,
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent:'center'
 
   }
 });
