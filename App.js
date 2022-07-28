@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet,TextInput, Image,Text, View, Dimensions, ScrollView, Button, Alert } from 'react-native';
-
+import {InputIdea} from './inputData.js'
 import React, { Component } from 'react';
 
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 
 function DisplayBook(props){
   return(
@@ -22,20 +23,14 @@ function DisplayBook(props){
       <Text style={styles.titleBook}>{props.title}</Text>
       <Text style={styles.titleBook}>{props.detail}</Text>
       </View>
+      <Button title ="See Detail" onPress ={(event)=>props.seeDetails(props.title,event)}/>
 
     </View>
 
   )
 }
 
-function InputData(props){
-  return(
-    <View>
 
-    </View>
-  )
-
-}
 
 function AddBooks(props){
     return(
@@ -65,8 +60,18 @@ export default class App extends Component {
       books: [],
       names: [],
       addBooks: false,
-      renderAddBook: true,
+      renderAddBook: 3,
+      bookName:'',
+      idea:[]
+
     }
+  }
+  seeDetail(name,event){
+    this.setState({
+      renderAddBook: 3,
+      bookName: name
+    })
+
   }
   componentDidMount(){
     fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
@@ -87,34 +92,37 @@ export default class App extends Component {
     })
   }
   render(){
-    const {books,names,renderAddBook} = this.state
+    const {books,names,renderAddBook, idea} = this.state
+    console.log(this.state.books)
     const de = this.state.books.map((a,b)=>{
       // console.log(a['url'])
      return (
-       <DisplayBook style={styles.bookView} title={names[b]} link = {a["url"]} detail = {a["description"]}/>
+       <DisplayBook style={styles.bookView} seeDetails={this.seeDetail.bind(this)} title={names[b]} link = {a["url"]} detail = {a["description"]}/>
       )
     })
-    if(this.state.renderAddBook){
+    if(this.state.renderAddBook == 2){
       var addBookTemplate = <AddBooks/>
-    }else{
+    }else if(this.state.renderAddBook == 1){
       var addBookTemplate = de
+    }else if(this.state.renderAddBook == 3){
+      var addBookTemplate = this.state.books.map((a,b)=>{
+        return(
+	         <View>
+            <Text style={styles.titleBook}>dedesf</Text>
+            </View>
+          )
+        })
+
+
     }
       // console.log(books)
       console.log("Run")
     return (
       <View style={styles.container}>
 
-      <ScrollView>
+      <ScrollView style= {styles.scroll}>
       {addBookTemplate}
-      <Button
-        title="Press me"
-        color="#841584"
-        onPress={()=>{
-          this.setState({
-            renderAddBook: true
-          })
-        }}
-      />
+      <Button title="Add Book" color="#345582" onPress={()=>{this.setState({renderAddBook: true})}}/>
 
       </ScrollView>
 
@@ -146,6 +154,9 @@ export default class App extends Component {
 // });
 
 const styles = StyleSheet.create({
+  scroll:{
+    marginTop: 40
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -160,7 +171,9 @@ const styles = StyleSheet.create({
         width:windowWidth - 2,
         justifyContent:'center',
         alignItems:'center',
-        margin: 2
+        margin: 2,
+        borderRadius:15
+
 
   },
   bookShow: {
@@ -170,7 +183,6 @@ const styles = StyleSheet.create({
     width : 80,
     height: 100,
     margin: 20,
-    textAlign:'center'
   },
   titleBook: {
     fontSize: 20,
