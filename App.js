@@ -32,25 +32,41 @@ function DisplayBook(props){
 
 
 function AddBooks(props){
+    var bookInput ={
+      bookName:'',
+      link:'',
+      description:''
+    }
+    const [bookName, onChangeBook] = React.useState("BookName");
+    const [link, onChangeLink] = React.useState("Link");
+    const [description, onChangeDescription] = React.useState("description");
     return(
       <View style={styles.addBookSty}>
         <Text style = {styles.titleBook}> Add Books</Text>
         <TextInput
         style={styles.input}
-        value = {props.bookName}
+        onChangeText={onChangeBook}
         placeholder="Book Name"
+        value={bookName}
       />
       <TextInput
           style={styles.input}
+          onChangeText={onChangeLink}
           placeholder="url"
-          value = {props.link}
+          value={link}
         />
         <TextInput
         style={styles.input}
-        // onChangeText={onChangeText}
-        value ={props.descrip}
+        onChangeText={onChangeDescription}
         placeholder="description"
+        value={description}
       />
+
+      <Button style={styles.buttonSty} title="Add Book" color="#d4a3b6" onPress={()=>{
+
+        console.log(typeof bookName)
+        addMyBook(bookName,link,description)
+      }}/>
       </View>
     )
 }
@@ -128,7 +144,6 @@ export default class App extends Component {
       <View style={styles.buttonView}>
       <Button style={styles.buttonSty} title="Home" color="#f194ff" onPress={()=>{this.setState({renderAddBook: 1})}}/>
       <Button style={styles.buttonSty} title="Add My Book"  onPress={this.addBook.bind(this)}/>
-      <Button style={styles.buttonSty} title="Add Book" color="#f194ff" onPress={()=>{console.log("de")}}/>
 
       </View>
 
@@ -152,6 +167,10 @@ function addMyBook(nameBook, link, description){
   fetch('https://nauticalautomaticirc.lamvan.repl.co/add', {
     method: 'POST',
     body: formData,
+    headers: {
+      'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+      'Content-Type': 'application/json'
+    }
   })
   .then((response) => response.json())
   .then((data) => {
