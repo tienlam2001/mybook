@@ -100,6 +100,7 @@ export default class App extends Component {
 
   }
   componentDidMount(){
+
       fetch("https://nauticalautomaticirc.lamvan.repl.co/books")
     .then(req=>req.json())
     .then(res=>{
@@ -142,6 +143,12 @@ export default class App extends Component {
       {addBookTemplate}
 
       <View style={styles.buttonView}>
+      <Button style={styles.buttonSty} title="refresh" color="#f695aa" onPress={()=>{
+      this.state.books = []
+      this.componentDidMount()
+      this.render()
+    }}/>
+
       <Button style={styles.buttonSty} title="Home" color="#f194ff" onPress={()=>{this.setState({renderAddBook: 1})}}/>
       <Button style={styles.buttonSty} title="Add My Book"  onPress={this.addBook.bind(this)}/>
 
