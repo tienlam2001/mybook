@@ -29,22 +29,24 @@ export function InputIdea(props){
         }}
       />
       <ScrollView>
+      {state ? (<Text>Success</Text>) : (<Text>no action</Text>)}
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeIdea}
+        placeholder="Idea"
+        value={idea}
+
+      />
+      <Button title="Enter" onPress={()=>{
+        addIdea(idea,props.title)
+        isInsert(true)
+      }}/>
       {
         refresh.map((a)=><Text style={styles.titleBook}>{a}</Text>)
       }
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeIdea}
-          placeholder="Idea"
-          value={idea}
 
-        />
-        <Button title="Enter" onPress={()=>{
-          addIdea(idea,props.title)
-          isInsert(true)
-        }}/>
       </ScrollView>
-      {state ? (<Text>Success</Text>) : (<Text>no action</Text>)}
+
 
     </View>
   )

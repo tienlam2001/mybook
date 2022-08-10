@@ -40,6 +40,7 @@ function AddBooks(props){
     const [bookName, onChangeBook] = React.useState("BookName");
     const [link, onChangeLink] = React.useState("Link");
     const [description, onChangeDescription] = React.useState("description");
+    const [add, isAdded] = React.useState(false)
     return(
       <View style={styles.addBookSty}>
         <Text style = {styles.titleBook}> Add Books</Text>
@@ -61,11 +62,13 @@ function AddBooks(props){
         placeholder="description"
         value={description}
       />
+      {add ? (<Text>Success added</Text>) : (<Text>no action</Text>)}
 
       <Button style={styles.buttonSty} title="Add Book" color="#d4a3b6" onPress={()=>{
 
         console.log(typeof bookName)
         addMyBook(bookName,link,description)
+        isAdded(true)
       }}/>
       </View>
     )
@@ -149,7 +152,11 @@ export default class App extends Component {
       this.render()
     }}/>
 
-      <Button style={styles.buttonSty} title="Home" color="#f194ff" onPress={()=>{this.setState({renderAddBook: 1})}}/>
+      <Button style={styles.buttonSty} title="Home" color="#f194ff" onPress={()=>{
+        this.state.books = []
+        this.componentDidMount()
+        this.render()
+        this.setState({renderAddBook: 1})}}/>
       <Button style={styles.buttonSty} title="Add My Book"  onPress={this.addBook.bind(this)}/>
 
       </View>
